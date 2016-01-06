@@ -1,0 +1,634 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GpsMainService</name>
+    </assembly>
+    <members>
+        <member name="T:Geomac.Session">
+            <summary>
+            Klasa sesji zawiera informację o zalogowanym userze i czasie jego ostatniej aktywności
+            </summary>
+        </member>
+        <member name="M:Geomac.Session.DodajSesje(System.String,System.String,System.Int32,System.String,System.Collections.Hashtable)">
+            <summary>
+            Dodaje nową sesję 
+            </summary>
+            <param name="guid">guid</param>
+            <param name="login">Login</param>
+            <param name="UzytkownikID">uzytkownikID</param>
+            <param name="ip">Adres Ip klienta</param>
+            <param name="sesje">Tablica sesji</param>
+            <returns>Klucz sesji</returns>
+        </member>
+        <member name="M:Geomac.Session.DajSesje(System.String,System.Collections.Hashtable)">
+            <summary>
+            Zwraca sesję jeśli jest aktywna lub null jeśli brak sesji o podanym kluczu lub już 
+            jest nieaktywna
+            </summary>
+            <param name="key"></param>
+            <param name="sesje"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.Session.KasujNieaktywneSesje(System.Collections.Hashtable)">
+            <summary>
+            Usuwanie nieaktywnych sesji tzn. takich w których user nie zażądał obsługi przez 
+            ostatnie 15 minut
+            </summary>
+            <param name="sesje">Tablica sesji</param>
+        </member>
+        <member name="M:Geomac.Lokalizator.Insert">
+            <summary>
+            Przy zapisie do bazy uzupełniamy ew. Ip i port webService'u, z którym ma się komunikować
+            lokalizator i zwiększamy liczbę zarejestrowanych lokalizotrów w tym serwisie
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.Lokalizator.Delete">
+            <summary>
+            Po usunięciu lokalizatora z bazy zmniejszamy liczbę lokalizatorów w SerwerLokalizatorow, z którym
+            lokalizator się komunikował
+            </summary>
+        </member>
+        <member name="M:Geomac.Lokalizator.LokalizatoryUzytkownika(SystemMac.TabParam)">
+            <summary>
+            Zwraca listę lokalizatorów użytkownika
+            </summary>
+            <param name="guid"></param>
+            <param name="idRekordu_User"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.Lokalizator.ConvertToType(Geomac.Lokalizator)">
+            <summary>
+            Tworzy obiekt Lokalizator odpowiedniego typu na podstawie obiektu Lokalizator
+            </summary>
+            <param name="l"></param>
+        </member>
+        <member name="M:Geomac.Lokalizator.DefiniujLokalizatoryDoTestow">
+            <summary>
+            Zwraca lokalizator dla podanych parametrów lub null jeśli nie ma takiego
+            </summary>
+            <param name="idn"></param>
+            <param name="ip"></param>
+            <param name="typLokalizatora_IdRekordu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.Lokalizator.ReadMessage(System.Byte[]@,System.Int32@)">
+            <summary>
+            Odczytanie komunikatu z lokalizatora. Zwracany jest pierwszy znaleziony komunikat z bufora 
+            z danymi.
+            W buforze (buffer) pozostałe dane są przesuwane do początku. Aktualizowana jest także długość 
+            danych pozostałych w buforze (length).
+            </summary>
+            <param name="buffer">Bufor z odebranymi danymi</param>
+            <param name="buf_length">Długość danych w buforze</param>
+            <returns>komunikat odczytany, null - brak komunikatu</returns>
+        </member>
+        <member name="M:Geomac.Lokalizator.AnalyseMessage(System.Byte[])">
+            <summary>
+            Analiza komunikatu z lokalizatora
+            </summary>
+            <param name="buffer">Bufor z odebranym komunikatem</param>
+            <returns>komunikat odczytany, null - brak komunikatu</returns>
+        </member>
+        <member name="M:Geomac.Lokalizator.AnalyseReceivedData(System.Byte[]@,System.Int32@)">
+            <summary>
+            Odczytanie komunikatu z lokalizatora
+            </summary>
+            <param name="buffer">Bufor z odebranymi danymi</param>
+            <param name="buf_length">Długość danych w buforze</param>
+            <returns>komunikat odczytany, null - brak komunikatu</returns>
+        </member>
+        <member name="M:Geomac.Lokalizator.SetInterval(System.Int32)">
+            <summary>
+            Wysyła do lokalizatora rozkaz ustawiający częstotliwość nadawania komunikatów
+            </summary>
+            <param name="interval">Interwał w sekundach</param>
+        </member>
+        <member name="M:Geomac.LokalizatorTK102.ReadMessage(System.Byte[]@,System.Int32@)">
+            <summary>
+            Odczytanie komunikatu z lokalizatora. Zwracany jest pierwszy znaleziony komunikat z bufora 
+            z danymi.
+            W buforze (buffer) pozostałe dane są przesuwane do początku. Aktualizowana jest także długość 
+            danych pozostałych w buforze (length).
+            </summary>
+            <param name="buffer">Bufor z odebranymi danymi</param>
+            <param name="buf_length">Długość danych w buforze</param>
+            <returns>komunikat odczytany, null - brak komunikatu</returns>
+        </member>
+        <member name="M:Geomac.LokalizatorTK102.AnalyseMessage(System.Byte[])">
+            <summary>
+            Analiza komunikatu z lokalizatora
+            </summary>
+            <param name="buffer">Bufor z odebranym komunikatem</param>
+            <returns>komunikat odczytany, null - brak komunikatu</returns>
+        </member>
+        <member name="M:Geomac.LokalizatorTK102.AnalyseReceivedData(System.Byte[]@,System.Int32@)">
+            <summary>
+            Odczytanie komunikatu z lokalizatora
+            </summary>
+            <param name="clientSocket">Socket połaczenia</param>
+            <param name="buffer">Bufor z odebranymi danymi</param>
+            <param name="buf_length">Długość danych w buforze</param>
+            <returns>komunikat odczytany, null - brak komunikatu</returns>
+        </member>
+        <member name="M:Geomac.LokalizatorTK102.SetInterval(System.Int32)">
+            <summary>
+            Wysyła do lokalizatora rozkaz ustawiający częstotliwość nadawania komunikatów
+            </summary>
+            <param name="clientSocket"></param>
+            <param name="interval">Interwał w sekundach</param>
+        </member>
+        <member name="M:Geomac.GpsMessage.LastMessage(System.Int32)">
+            <summary>
+            Ostatni komunikat z lokalizatora 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.GpsMessage.okreslTyp(System.Byte[]@,System.Int32@)">
+            <summary>
+            Określa typ lokalizatora nieznanego typu
+            </summary>
+            <param name="buffer">Bufor z odebranymi danymi</param>
+            <param name="length">Długość danych w buforze</param>
+            <returns>Typ lokalizatora</returns>
+        </member>
+        <member name="T:Geomac.TCPSocketListener">
+            <summary>
+            Summary description for TCPSocketListener.
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPSocketListener.#ctor(System.Net.Sockets.Socket,Geomac.TypLokalizatoraId)">
+            <summary>
+            Client Socket Listener Constructor.
+            </summary>
+            <param name="m_clientSocket"></param>
+        </member>
+        <member name="M:Geomac.TCPSocketListener.ReceiveData">
+            <summary>
+            Odbiór danych
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPSocketListener.MarkForDeletion(Geomac.ListenerDeletionReason)">
+            <summary>
+            Zaznacza wątek nasłuchujący do skasowania
+            </summary>
+            <param name="reason">Przyczyna kasowania</param>
+        </member>
+        <member name="P:Geomac.TCPSocketListener.LastGpsMessage">
+            <summary>
+            Ostatni komunikat odebrany z GPS 
+            </summary>
+        </member>
+        <member name="T:Geomac.ListenerStatus">
+            <summary>
+            Status połączenia
+            </summary>
+        </member>
+        <member name="T:Geomac.ListenerDeletionReason">
+            <summary>
+            Przyczyny zakończenia nasłuchu
+            </summary>
+        </member>
+        <member name="M:Geomac.Uzytkownik.DodajUzytkownika(SystemMac.TabParam)">
+            <summary>
+            Dodanie nowego użytkownika
+            </summary>
+            <param name="parwe">
+            parametry wymagane: idn, email, haslo
+            </param>
+            <returns>
+            0 - OK
+            1 - Wymagane parametry: idn, haslo, email
+            107 - Błąd walidacji
+            109 - Inny błąd
+            </returns>
+        </member>
+        <member name="M:Geomac.Uzytkownik.ModyfikujUzytkownika(SystemMac.TabParam)">
+            <summary>
+            Zmiana hasła lub emaila użytkownika
+            </summary>
+            <param name="parwe">
+            parametr wymagany: uzytkownikID
+            parametry pozostałe: idn, email, haslo, haslo_nowe
+            </param>
+            <returns>
+            0 - OK
+            1 - Wymagany parametr: uzytkownikID
+            2 - Brak użytkownika o podanym ID
+            3 - Nowe hasło nie może być puste.
+            4 - Błędne hasło dotychczasowe.
+            107 - Błąd walidacji
+            109 - Inny błąd
+            </returns>
+        </member>
+        <member name="M:Geomac.Uzytkownik.UsunUzytkownika(SystemMac.TabParam)">
+            <summary>
+            Usunięcie użytkownika
+            </summary>
+            <param name="parwe">
+            parametr wymagany: uzytkownikID
+            </param>
+            <returns>
+            0 - OK
+            1 - Wymagany parametr: uzytkownikID
+            109 - Inny błąd
+            </returns>
+        </member>
+        <member name="M:Geomac.Uzytkownik.WeryfikujKonto(SystemMac.TabParam)">
+            <summary>
+            Weryfikacja konta użytkownika
+            </summary>
+            <returns>
+            0 - OK
+            1 - Wymagany parametr: guid
+            109 - Inny błąd
+            </returns>
+        </member>
+        <member name="M:Geomac.Uzytkownik.DajUzytkownika(SystemMac.TabParam)">
+            <summary>
+            Zwraca użytkownika
+            </summary>
+            <returns>
+            0 - OK
+            1 - Wymagany parametr: 'uzytkownikID' lub 'idn'
+            109 - Inny błąd
+            </returns>
+        </member>
+        <member name="M:Geomac.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:Geomac.XmlConfiguration">
+            <summary>
+            Klasa odczytująca parametry i ich wartości z pliku konfiguracyjnego appconfig.xml
+            </summary>
+        </member>
+        <member name="T:Geomac.TCPServer">
+            <summary>
+            TCPServer is the Server class. When "StartServer" method is called
+            this Server object tries to connect to a IP Address specified on a port
+            configured. Then the server start listening for client socket requests.
+            As soon as a request comes in from any client then a Client Socket 
+            Listening thread will be started. That thread is responsible for client
+            communication.
+            </summary>
+        </member>
+        <member name="F:Geomac.TCPServer.m_server">
+            <summary>
+            Local Variables Declaration.
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.#ctor(System.String,System.Int32,Geomac.TypLokalizatoraId)">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.Finalize">
+            <summary>
+            Destructor.
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.GetLocalIP">
+            <summary>
+            Gets IP addresses of the local computer
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.StartServer">
+            <summary>
+            Method that starts TCP/IP Server.
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.StopServer">
+            <summary>
+            Method that stops the TCP/IP Server i kasuje wszystkie 4 wątki
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.ServerThreadStart">
+            <summary>
+            Wątek nasłuchujący nowych klientów
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.ReadSocketThreadStart">
+            <summary>
+            Wątek odczytujący komunikaty z lokalizatorów
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.PurgingThreadStart">
+            <summary>
+            Wątek kasujący nieaktywne połączenia (a konkretnie te, które zostały zaznaczone do skasowania)
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.OnDataReceived(System.Object,System.Object)">
+            <summary>
+            Obsługa zdarzenia odbioru danych 
+            (zdarzenia odbioru danych z listenera powodują wystąpienie tego zdarzenia w serwerze)
+            </summary>
+        </member>
+        <member name="M:Geomac.TCPServer.weryfikujIdNowegoPolaczenia(Geomac.TCPSocketListener)">
+            <summary>
+            Funkcja weryfikuje czy nowe połączenie jest uprawnione.
+            Sprawdza czy Id urządzenia jest zarejestrowane w bazie danych.
+            Wykrywa zdublowane połączenia dla Id i zostawia jedno. 
+            Funkcja wywoływana po odbiorze danych z urządzenia.
+            </summary>
+            <param name="socketListener">weryfikowane połączenie</param>
+        </member>
+        <member name="M:Geomac.TCPServer.AddGpsMessageToMemoryTable(System.Int32,Geomac.GpsMessage)">
+            <summary>
+            Dodaje do tablicy message odebrany z gps'a. W tablicy są pamiętane ostatnie
+            message dla gps'a o danym m_id.
+            </summary>
+            <param name="gpsMessage"></param>
+        </member>
+        <member name="M:Geomac.TCPServer.GetLastGpsMessage(System.Int32)">
+            <summary>
+            Zwraca ostatni message gps'a o podanym uzytkownikID
+            </summary>
+            <param name="lokalizator_IdRekordu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.TCPServer.PodajInfo">
+            <summary>
+            Zwraca informacje o serwerze
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Geomac.TCPServerInfo">
+            <summary>
+            Klasa obiektu - Informacja o serwerze
+            </summary>
+        </member>
+        <member name="P:Geomac.TCPServerInfo.LastResponse">
+            <summary>
+            Czas ostatniej odpowiedzi SerwerLokalizatorow'u
+            </summary>
+        </member>
+        <member name="T:Geomac.DataReceivedEventArgs">
+            <summary>
+            Klasa argumentów zdarzenia odbioru danych z portu
+            </summary>
+        </member>
+        <member name="P:Geomac.DataReceivedEventArgs.DataObject">
+            <summary>
+            Dane odebrany z portu
+            </summary>
+        </member>
+        <member name="F:Geomac.FormInfo.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Geomac.FormInfo.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Geomac.FormInfo.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Geomac.GeomacService.#ctor(System.String,Geomac.GeomacWezelTyp,System.String)">
+            <summary>
+            Geomac serwis
+            </summary>
+            <param name="serviceAddress">Adres uruchamianego webService</param>
+            <param name="geomacWezelTyp">Typ webService</param>
+            <param name="mainServiceAddress">Adres głównego webService</param>
+        </member>
+        <member name="M:Geomac.GeomacService.RunService">
+            <summary>
+            Uruchomienie hosta serwisu
+            </summary>
+        </member>
+        <member name="M:Geomac.GeomacService.StopService">
+            <summary>
+            Zamknięcie hosta serwisu
+            </summary>
+        </member>
+        <member name="M:Geomac.GeomacService.FunkcjaTimera(System.Object)">
+            <summary>
+            W funkcji timera jest wywoływana metoda głównego Webserwisu: "ZglosGeomacWezel", 
+            która służy do okresowego "meldowania się" Webserwisów podrzędnych
+            </summary>
+            <param name="stateInfo"></param>
+        </member>
+        <member name="M:Geomac.GeomacService.Zaloguj(SystemMac.TabParam)">
+            <summary>
+            Logowanie użytkownika do systemu
+            </summary>
+            <param name="parwe">
+            parametry we wymagane
+                idn: Idn użytkownika
+                haslo: Hasło użytkownika
+                ip: IP komputera klienta (ew.dodawane przez program)
+            </param>
+            <returns>
+            Pomyślne logowanie
+                retcode: 0 
+                guid: guid sesji
+                uzytkownikID: ID użytkownika
+            Uzytkownik lub hasło są nieprawidłowe
+                retcode: 101 
+                message: "Użytkownik lub hasło są nieprawidłowe."
+            Konto nie zostało aktywowane
+                retcode: 102 
+                message: "Konto nie zostało aktywowane."
+            </returns>
+        </member>
+        <member name="M:Geomac.GeomacService.CzySesjaAktywna(SystemMac.TabParam)">
+            <summary>
+            Sprawdza czy sesja aktywna
+            </summary>
+            <param name="parwe">
+            parametry we wymagane
+                guid: Guid sesji
+                ip: IP komputera klienta (ew.dodawane przez program)
+            </param>
+            <returns>
+            Sesja aktywna
+                retcode: 0
+                uzytkownik_Idn: identyfikator użytkownika
+                uzytkownikID: ID użytkownika
+            Sesja nieaktywna
+                retcode: 99 
+                message: "Sesja nieaktywna"
+            </returns>
+        </member>
+        <member name="M:Geomac.GeomacService.ZglosGeomacWezel(SystemMac.TabParam)">
+            <summary>
+            Zgłoszenie węzła Geomac
+            </summary>
+            <param name="typ">typ węzła Geomac</param>
+            <param name="[ip]">IP hosta</param>
+            <returns>
+            retcode: 0 - OK
+            </returns>
+        </member>
+        <member name="M:Geomac.TypLokalizatora.DajTypyLokalizatorow(SystemMac.TabParam)">
+            <summary>
+            Zwraca listę typów lokalizatorów
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Geomac.TypLokalizatoraId">
+            <summary>
+            Typy lokalizatorów
+            </summary>
+        </member>
+        <member name="M:Geomac.LokalizatorGT30.ReadMessage(System.Byte[]@,System.Int32@)">
+            <summary>
+            Odczytanie komunikatu z lokalizatora. Zwracany jest pierwszy znaleziony komunikat z bufora 
+            z danymi.
+            W buforze (buffer) pozostałe dane są przesuwane do początku. Aktualizowana jest także długość 
+            danych pozostałych w buforze (length).
+            </summary>
+            <param name="buffer">Bufor z odebranymi danymi</param>
+            <param name="buf_length">Długość danych w buforze</param>
+            <returns>komunikat odczytany, null - brak komunikatu</returns>
+        </member>
+        <member name="M:Geomac.LokalizatorGT30.AnalyseMessage(System.Byte[])">
+            <summary>
+            Analiza komunikatu z lokalizatora
+            </summary>
+            <param name="buffer">Bufor z odebranym komunikatem</param>
+            <returns>komunikat odczytany, null - brak komunikatu</returns>
+        </member>
+        <member name="M:Geomac.LokalizatorGT30.ByteToId(System.Byte[])">
+            <summary>
+             Cyfry identyfikatora sa zapisane na 7 bajtach po 2 cyfry na bajt.
+             Zamieniamy bajty na string.
+            </summary>
+            <param name="buffer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.LokalizatorGT30.IdToByte(System.String)">
+            <summary>
+             Cyfry identyfikatora sa zapisane na 7 bajtach po 2 cyfry na bajt.
+             Zamieniamy string na tablicę bajtów .
+            </summary>
+            <param name="buffer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.LokalizatorGT30.AnalyseReceivedData(System.Byte[]@,System.Int32@)">
+            <summary>
+            Odczytanie komunikatu z lokalizatora
+            </summary>
+            <param name="buffer">Bufor z odebranymi danymi</param>
+            <param name="buf_length">Długość danych w buforze</param>
+            <returns> odczytany komunikat, null - brak komunikatu</returns>
+        </member>
+        <member name="M:Geomac.LokalizatorGT30.SetInterval(System.Int32)">
+            <summary>
+            Wysyła do lokalizatora rozkaz ustawiający częstotliwość nadawania komunikatów
+            </summary>
+            <param name="clientSocket"></param>
+            <param name="interval">Interwał w sekundach</param>
+        </member>
+        <member name="T:Geomac.DeserializeException">
+            <summary>
+            Klasa DeserializeException określa wyjątek wyrzucany przy błędzie deserializacji.
+            </summary>
+        </member>
+        <member name="P:Geomac.DeserializeException.Field">
+            <summary>
+            Nazwa pola/właściwości której dotyczy wyjątek
+            </summary>
+        </member>
+        <member name="F:Geomac.FormService.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Geomac.FormService.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Geomac.FormService.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Geomac.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Geomac.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Geomac.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Geomac.CallWebService">
+            <summary>
+            Klasa zawierająca statyczne funkcje służące do wywoływania metod z WebService'ów
+            </summary>
+        </member>
+        <member name="M:Geomac.CallWebService.WywolajMetodeZewnWebService(System.String,SystemMac.TabParam)">
+            <summary>
+            Wywołanie metody z WebService
+            </summary>
+            <param name="webServiceAddress"></param>
+            <param name="par"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.CallWebService.UtworzPolaczenieZewnWebService(System.String)">
+            <summary>
+            Tworzy połączenie z webService-em
+            </summary>
+            <param name="webServiceAddress"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.ByteHexString.ToHexStr(System.Byte[],System.Int32)">
+            <summary>
+            Zamiana  byte[]->Hex string
+            </summary>
+            <param name="data"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.ByteHexString.ToHexStr(System.Byte[])">
+            <summary>
+            Zamiana  byte[]->Hex string
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Geomac.ByteHexString.ToByteArray(System.String)">
+            <summary>
+            Zamiana Hex string -> byte[]
+            </summary>
+            <param name="hexString"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Geomac.MessageInterceptorClass">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Geomac.MessageInterceptorClass.BeforeSendReply(System.ServiceModel.Channels.Message@,System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="reply"></param>
+            <param name="correlationState">Wartość zwrócona przez AfterReceiveRequest() określa czy żądaną metodą była OPTIONS</param>
+        </member>
+        <member name="T:Geomac.GeomacWezelTyp">
+            <summary>
+            Typy webservice'u
+            </summary>
+        </member>
+    </members>
+</doc>

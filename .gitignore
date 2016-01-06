@@ -1,0 +1,5 @@
+#pliki ignorowane przez gita
+HttpRootDirectory/data/
+HttpRootDirectory/dhtmlx/
+src/bin/
+src/obj/

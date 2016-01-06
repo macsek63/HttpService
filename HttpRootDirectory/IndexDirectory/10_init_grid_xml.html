@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>Loading from XML</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../dhtmlx/codebase/dhtmlx.css"/>
+	<script src="../dhtmlx/codebase/dhtmlx.js"></script>
+	<style>
+		div#layoutObj {
+			position: relative;
+			margin-top: 20px;
+			margin-left: 20px;
+			width: 600px;
+			height: 400px;
+		}
+		.even{
+			background-color:#E6E6FA;
+		}
+		.uneven{
+			background-color:#F0F8FF;
+		}
+	</style>
+	<script>
+	    xml_str = '<rows>' +
+                '<row ffff="1">' +
+                '<cell>11</cell>' +
+                '<cell>loaded from xml string</cell>' +
+                '<cell>11</cell>' +
+                '<cell>11</cell>' +
+                '<cell>11</cell>' +
+                '<cell>11</cell>' +
+                '<cell>11</cell>' +
+                '<cell>11</cell>' +
+                '</row>' +
+            '</rows>';
+
+	    json_obj = {
+	        rows: [
+                {
+                    id: 1,
+                    data: [
+                         "11",
+                         "loaded from data_json",
+                         "a",
+                         "a",
+                         "a",
+                         "a",
+                         "a",
+                         "12/01/1991"]
+                },
+                {
+                    id: 2,
+                    data: [
+                         "22",
+                         "loaded from data_json",
+                         "a",
+                         "a",
+                         "a",
+                         "a",
+                         "a",
+                         "12/01/1991"]
+                },
+                {
+                    id: 3,
+                    data: [
+                         "22",
+                         "loaded from data_json",
+                         "a",
+                         "a",
+                         "a",
+                         "a",
+                         "a",
+                         "12/01/1991"]
+                }
+	        ]
+	    };
+
+	    var myGrid;
+	    myGrid = new dhtmlXGridObject('gridbox');
+	    function doOnLoad() {
+			myLayout = new dhtmlXLayoutObject({
+				parent: "layoutObj",
+				pattern: "3L",
+				cells: [{id: "a", text: "dhtmlxGrid"}]
+			});
+
+		myGrid = myLayout.cells("a").attachGrid();
+	        //myGrid = new dhtmlXGridObject('gridbox');
+	        myGrid.setImagePath("../dhtmlx/codebase/imgs/");
+	        myGrid.setHeader("Sales,edtxt,ed,Price,In Store,Shipping,Bestseller,Date of Publication");
+	        myGrid.setInitWidths("50,150,100,80,80,80,80,200");
+	        myGrid.setColAlign("right,left,left,right,center,left,center,center");
+	        myGrid.setColTypes("dyn,edtxt,ed,price,ch,co,ra,ro");
+	        myGrid.getCombo(5).put(2, 2);
+	        myGrid.setColSorting("int,str,str,int,str,str,str,date");
+	        myGrid.init();
+	        myGrid.enableAlterCss("even", "uneven");
+	        myGrid.load("../data/grid.xml");
+
+	    };
+
+
+		//function load_data() {
+		//    window.dhx4.ajax.post("server.php", "action=get_nodes", function (r) {
+		//        var items = [];
+		//        var xml = r.xmlDoc.responseXML;
+		//        var nodes = xml.getElementsByTagName("items");
+		//        for (var q = 0; q < nodes.lengt; q++) {
+		//            items.push({
+		//                name: nodes[q].getAttribute("name"),
+		//                value: nodes[q].getAttribute("value")
+		//            });
+		//        }
+		//    });
+		//}
+
+
+	</script>
+</head>
+
+<body onload="doOnLoad()">
+	<h1>Refresh</h1>
+	<div id="layoutObj"></div>
+	<p>Refresh operation doesn't recreate grid, it just updates data in it, as result the state of grid is fully preserved.</p>
+	<div id="gridbox" style="width:600px; height:270px; background-color:white;"></div>
+	<br>
+	<div><a href="#" onClick="myGrid.clearAll(); myGrid.load('../data/first.xml');">Reload grid - classic way</a></div>
+	<div><a href="#" onClick="myGrid.load('../data/second.xml');">Reload grid - clear grid from XML</a></div>
+	<div><a href="#" onClick="myGrid.updateFromXML('../data/third.xml');">Reload grid - refresh data only </a></div>
+	<div><a href="#" onClick="myGrid.clearAll();myGrid.parse(xml_str);">Reload from XML string </a></div>
+	<div><a href="#" onClick="myGrid.clearAll();alert('old data cleared\nloading new one...');myGrid.parse(json_obj,'json');">Reload from json object</a></div>
+</body>
+</html>

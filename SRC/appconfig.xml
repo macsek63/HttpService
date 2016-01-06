@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <appSettings>
+    <add key="SQLServer" value="DPO_MAC" />
+    <add key="Database" value="TST_600C_MAL" />
+    <add key="Login" value="mac" />
+    <add key="Password" value="7QfFrRMQIB0=" />
+    <add key="Port_http" value="1602" />
+    <add key="Port_https" value="1603" />
+    <add key="IndexFile_http" value="index.html" />
+    <add key="IndexFile_https" value="IndexDirectory\index2.html" />
+    <add key="RootDirectory" value="C:\DANE_MACY\Projekty_VS2010\HttpService\HttpRootDirectory" />
+    <add key="_RootDirectory" value="C:\DANE_MACY\VSProjects\HttpService\HttpRootDirectory" />
+  </appSettings>
+</configuration>

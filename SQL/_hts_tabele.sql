@@ -1,4 +1,5 @@
 -- tabela  procedur dostêpnych dla serwisu http
+--
 IF OBJECT_ID('hts_dostepne_procedury', 'U') IS NULL
 begin
 	print 'nowa tabela: [hts_dostepne_procedury]'

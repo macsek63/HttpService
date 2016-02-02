@@ -9,7 +9,6 @@ using System.Threading;
 using System.Text;
 using System.Globalization;
 using System.Data;
-using Newtonsoft.Json;
 
 namespace HttpService
 {

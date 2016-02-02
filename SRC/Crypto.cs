@@ -12,26 +12,29 @@ namespace HttpService
 	public class Crypto
 	{
 
-        private TripleDESCryptoServiceProvider DES = new TripleDESCryptoServiceProvider();
+        //private TripleDESCryptoServiceProvider DES = new TripleDESCryptoServiceProvider();
+        //private MD5CryptoServiceProvider MD5 = new MD5CryptoServiceProvider();
 
-        private MD5CryptoServiceProvider MD5 = new MD5CryptoServiceProvider();
-        public byte[] MD5Hash(string value)
+        static private byte[] MD5Hash(string value)
         {
+            MD5CryptoServiceProvider MD5 = new MD5CryptoServiceProvider();
             return MD5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(value));
         }
 
-        public string Encrypt(string stringToEncrypt, string key)
+        static public string Encrypt(string stringToEncrypt, string key)
         {
+            TripleDESCryptoServiceProvider DES = new TripleDESCryptoServiceProvider();
             DES.Key = MD5Hash(key);
             DES.Mode = CipherMode.ECB;
             byte[] Buffer = ASCIIEncoding.ASCII.GetBytes(stringToEncrypt);
             return Convert.ToBase64String(DES.CreateEncryptor().TransformFinalBlock(Buffer, 0, Buffer.Length));
         }
 
-        public string Decrypt(string encryptedString, string key)
+        static public string Decrypt(string encryptedString, string key)
         {
             try
             {
+                TripleDESCryptoServiceProvider DES = new TripleDESCryptoServiceProvider();
                 DES.Key = MD5Hash(key);
                 DES.Mode = CipherMode.ECB;
                 byte[] Buffer = Convert.FromBase64String(encryptedString);

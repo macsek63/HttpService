@@ -29,7 +29,7 @@ declare
 	WHILE @@FETCH_STATUS = 0
 		BEGIN
 			if len(@sql_order_by) = 0
-				set @sql_order_by = ' order by '+ @col
+				set @sql_order_by = @col
 			else 
 				set @sql_order_by = @sql_order_by + ', '+ @col
 			if @order_type = 'DESC'

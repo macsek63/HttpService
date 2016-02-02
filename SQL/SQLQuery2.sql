@@ -1,12 +1,14 @@
 declare
 @idoc int,
-@param_xml xml
+@param_xml xml,
+@ret int,
+@ret_mess nvarchar(1000)
 
 set @param_xml =
-				'<param dok_id="28348" ret_type="json">'+
+				'<param_proc dok_id="28348">'+
 				'  <columns>' +
 				'    <column name="dwz_poz_id"/>' +
-				'    <column name="nrpoz" order_number="1" order_type="asc"/>' +
+				'    <column name="nrpoz" order_number="1" order_type="desc"/>' +
 				'    <column name="wytwor_nazwa"/>' +
 				'    <column name="wytwor_idm"/>' +
 				'    <column name="ilosc"/>' +
@@ -14,8 +16,8 @@ set @param_xml =
 				'    <column name="cena"/>' +
 				'    <column name="przel_jm"/>' +
 				'  </columns>' +
-				'</param>'
+				'</param_proc>'
 
-exec hts_ot_sp_get_poz_dok_wz @param_xml 
+exec hts_ot_sp_select_dwz_poz @param_xml, @ret OUT, @ret_mess OUT
 
 

@@ -19,6 +19,12 @@
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
+        <FileNode Name="_hts_tabele.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DPO_MAC:False:mac</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DPO_MAC</AssociatedConnSrvName>
+          <AssociatedConnUserName>mac</AssociatedConnUserName>
+          <FullPath>_hts_tabele.sql</FullPath>
+        </FileNode>
         <FileNode Name="hts_ot_sp_get_poz_dok_wz.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DPO_MAC:False:mac</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>DPO_MAC</AssociatedConnSrvName>

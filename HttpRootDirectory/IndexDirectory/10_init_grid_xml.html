@@ -7,13 +7,6 @@
 	<link rel="stylesheet" type="text/css" href="../dhtmlx/codebase/dhtmlx.css"/>
 	<script src="../dhtmlx/codebase/dhtmlx.js"></script>
 	<style>
-		div#layoutObj {
-			position: relative;
-			margin-top: 20px;
-			margin-left: 20px;
-			width: 600px;
-			height: 400px;
-		}
 		.even{
 			background-color:#E6E6FA;
 		}
@@ -26,7 +19,7 @@
                 '<row ffff="1">' +
                 '<cell>11</cell>' +
                 '<cell>loaded from xml string</cell>' +
-                '<cell>11</cell>' +
+                '<cell>ĘÓĄŚŁŻŹĆŃ--ęóąśłżźćń</cell>' +
                 '<cell>11</cell>' +
                 '<cell>11</cell>' +
                 '<cell>11</cell>' +
@@ -77,18 +70,11 @@
 	    };
 
 	    var myGrid;
-	    myGrid = new dhtmlXGridObject('gridbox');
+	    //myGrid = new dhtmlXGridObject('gridbox');
 	    function doOnLoad() {
-			myLayout = new dhtmlXLayoutObject({
-				parent: "layoutObj",
-				pattern: "3L",
-				cells: [{id: "a", text: "dhtmlxGrid"}]
-			});
-
-		myGrid = myLayout.cells("a").attachGrid();
-	        //myGrid = new dhtmlXGridObject('gridbox');
+	        myGrid = new dhtmlXGridObject('gridbox');
 	        myGrid.setImagePath("../dhtmlx/codebase/imgs/");
-	        myGrid.setHeader("Sales,edtxt,ed,Price,In Store,Shipping,Bestseller,Date of Publication");
+	        myGrid.setHeader("Sales,ĘÓĄŚŁŻŹĆŃ--ęóąśłżźćń,ed,Price,In Store,Shipping,Bestseller,Date of Publication");
 	        myGrid.setInitWidths("50,150,100,80,80,80,80,200");
 	        myGrid.setColAlign("right,left,left,right,center,left,center,center");
 	        myGrid.setColTypes("dyn,edtxt,ed,price,ch,co,ra,ro");
@@ -121,7 +107,6 @@
 
 <body onload="doOnLoad()">
 	<h1>Refresh</h1>
-	<div id="layoutObj"></div>
 	<p>Refresh operation doesn't recreate grid, it just updates data in it, as result the state of grid is fully preserved.</p>
 	<div id="gridbox" style="width:600px; height:270px; background-color:white;"></div>
 	<br>

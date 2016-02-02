@@ -1,76 +1,232 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+﻿<!DOCTYPE html>
+<html>
 <head>
-    <title>Simple use of Cross-Site XMLHttpRequest (Using Access Control)</title>
+    <title>Test interfejsu webowego</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <link rel="stylesheet" type="text/css" href="dhtmlx/codebase/dhtmlx.css">
+    <script src="dhtmlx/codebase/dhtmlx.js" type="text/javascript"></script>
+
+    <style>
+        /* it's important to set width/height to 100% for full-screen init */
+        html, body {
+            width: 100%;      /*provides the correct work of a full-screen layout*/ 
+            height: 100%;     /*provides the correct work of a full-screen layout*/
+            overflow: hidden; /*hides the default body's space*/
+            margin: 0px;      /*hides the body's scrolls*/
+        }
+
+		.even{
+			background-color:#E6E6FA;
+		}
+		.uneven{
+			background-color:#F0F8FF;
+		}
+
+        input:read-only{
+			/*background-color:#E2E2E2;*/
+			background-color:#F0F8FF;
+        }
+
+    </style>
+
+
+    <script type="text/javascript">
+        function gridPozWZ(grid) {
+            grid.setColumnIds("dwz_poz_id,nrpoz,wytwor_idm,wytwor_nazwa,ilosc,jm_idn,cena");
+            grid.setHeader("dwz_poz_id,Poz.,Produkt,Nazwa produktu,Ilość,J.m.,Cena,przel_jm");
+            grid.setInitWidths("0,40,150,300,120,50,80,0");
+            //myGrid.setImagePath("../dhtmlx/codebase/imgs/")
+            grid.setColAlign("right,right,left,left,right,center,right,right");
+            grid.setColTypes("ro,ro,ro,edtxt,ed,ro,ro,ro");
+            //grid.setColSorting("int,str");
+            grid.init();
+            grid.enableAlterCss("even", "uneven");
+        };
+
+
+        //gridDwzPoz = {
+        //    head: [
+        //        { id: "dwz_poz_id",     width: 0,   type: "ro", align: "right",     value: "dwz_poz_id" },
+        //        { id: "nrpoz",          width: 40,  type: "ro", align: "right",     value: "Poz." },
+        //        { id: "wytwor_id",      width: 150, type: "ro", align: "left",      value: "Produkt" },
+        //        { id: "wytwor_idm",     width: 300, type: "ed", align: "left",      value: "Nazwa produktu" },
+        //        { id: "wytwor_nazwa",   width: 120, type: "ed", align: "left",      value: "Ilość" },
+        //        { id: "ilosc",          width: 50,  type: "ro", align: "center",    value: "J.m." },
+        //        { id: "jm_idn",         width: 80,  type: "ro", align: "right",     value: "Cena" },
+        //        { id: "cena",           width: 0,   type: "ro", align: "tight",     value: "przel_jm" }
+        //    ]
+        //};
+
+
+        formDwzPoz = [
+            { type: "settings", position: "label-left", offsetLeft:20 },
+                {type: "fieldset", name: "b1", list: [
+                   { type: "input", name: 'wytwor_idm1', label: 'Produkt:' },
+                   { type: "input", name: "ilosc", label: 'Ilość:' },
+                   { type: "newcolumn" },
+                   { type: "input", name: "wytwor_nazwa", label: "Nazwa:", readonly: "1" }
+                    ,
+                { type: "newcolumn" }
+                ,
+                {
+                    type: "block", name: "b2", list: [
+                         { type: "input", name: 'wytwor_idm', label: 'Produkt:' },
+                         { type: "input", name: "ilosc", label: 'Ilość:' },
+                         { type: "newcolumn" },
+                         { type: "input", name: "wytwor_nazwa", label: "Nazwa:", readonly: "1" },
+                      { type: "input", name: "wytwor_nazwa2", label: "Nazwa2:", readonly: "1" }
+                    ]
+                }
+                ]
+                }
+
+        ];
+
+    </script>
+
+
     <script type="text/javascript">
-    //<![CDATA[
-
-    //var invocation = new XMLHttpRequest();
-    var invocation = new XMLHttpRequest();
-    var url = 'https://localhost:1603/WebService/Execute';
-    var invocationHistoryText;
-    var body = '{"idRekordu_User":"1"}';
+        var myLayout;
+        var myGrid;
+        var dataGrid;
+        var dataGridFormat = 'xml';
 
 
+        function doOnLoad() {
 
-    function callOtherDomain() {
+            //myGrid = new dhtmlXGridObject('gridbox');
 
-           if(invocation)
-           {
-               invocation.open('POST', url, true);
-               invocation.setRequestHeader('Content-Type', 'text/plain');
-               invocation.onreadystatechange = handler;
-               invocation.send(body);
+            myLayout = new dhtmlXLayoutObject({
+                parent: gridbox,  // parent container
+                //parent: document.body,  // parent container
+                pattern: "2E",           // layout's pattern
+                cells: [{ id: "a", text: "Pozycje dokumentu" }]
+            });
+            myGrid = myLayout.cells("a").attachGrid();
 
-           }
-           else
-           {
-               invocationHistoryText = "No Invocation TookPlace At All";
-               var textNode = document.createTextNode(invocationHistoryText);
-               var textDiv = document.getElementById("textDiv");
-               textDiv.appendChild(textNode);
-           }
+            var myTabbar = myLayout.cells("b").attachTabbar({
+                tabs: [{ id: "t1", text: "Dane podstawowe" }, { id: "t2", text: "Param.segr." }]
+            });
+            formTab1 = myTabbar.cells("t1").attachForm(formDwzPoz);
+            //formTab1 = myLayout.cells("b").attachForm(formDwzPoz);
 
-    }
-    function handler(evtXHR)
-    {
-        if (invocation.readyState == 4)
-        {
-                if (invocation.status == 200)
-                {
-                    var response = invocation.responseText;
-                    //var invocationHistory = response.getElementsByTagName('invocationHistory').item(0).firstChild.data;
-                    invocationHistoryText = document.createTextNode(response);
-                    var textDiv = document.getElementById("textDiv");
-                    textDiv.appendChild(invocationHistoryText);
 
-                }
-                else
-                {
-                    alert("Invocation Errors Occured " + invocation.readyState + " and the status is " + invocation.status + " " + invocation.statusText);
-                }
+
+            //formTab1.loadStruct("data.json", "json");
+            formTab1.attachEvent("onButtonClick", function (name, command) {
+                //if (name == "btnZapisz") {
+                    alert('Tu obsługa buttona: Zapisz' + name +command);
+                //}
+            });
+            formTab1.bind(myGrid);
+
+            gridPozWZ(myGrid);
+            //myGrid.clearAll();
+            LoadFromDatabase();
+        };
+
+        function odswiezGrida() {
+
+            myGrid.setColWidth(0, "100");
+            return;
+            myGrid = new dhtmlXGridObject('gridbox');
+            myGrid.setHeader("dwz_poz_id,Poz.,Produkt,Nazwa produktu,Ilość,J.m.,Cena,przel_jm");
+            myGrid.setInitWidths("100,40,150,300,120,50,80,0");
+            //myGrid.setImagePath("../dhtmlx/codebase/imgs/")
+            myGrid.setColAlign("right,right,left,left,right,center,right,right");
+            myGrid.setColTypes("ro,ro,ro,edtxt,ed,ro,ro,ro");
+            //grid.setColSorting("int,str");
+            myGrid.init();
+            myGrid.enableAlterCss("even", "uneven");
+
+            if (dataGridFormat == 'json')
+                myGrid.parse(dataGrid, 'json'); //json
+            else
+                myGrid.parse(dataGrid);
         }
-        else
-        {
-            alert("currently the application is at" + invocation.readyState);
-        }
-    }
 
+
+        function LoadFromDatabase() {
+
+            window.dhx4.ajax.post("SqlExecute",
+                            '<param>' +
+                            '   <proc>hts_ot_sp_select_dwz_poz</proc>' +
+                            '   <param_proc dok_id="28348">'+
+				            '       <columns>' +
+				            '       <column name="dwz_poz_id"/>' +
+				            '       <column name="nrpoz" order_number="1" order_type="asc"/>' +
+				            '       <column name="wytwor_idm"/>' +
+				            '       <column name="wytwor_nazwa"/>' +
+				            '       <column name="ilosc"/>' +
+				            '       <column name="jm_idn"/>' +
+				            '       <column name="cena"/>' +
+				            "       <column name='przel_jm'/>" +
+				            '       </columns>' +
+				            '   </param_proc>' +
+                            '   <param_ws>' +
+                            '       <response_format>' + dataGridFormat + '</response_format>' +
+                            '       <resultset_transform>' +
+                            '           <name>for_grid</name>' +
+                            '       </resultset_transform>' +
+                            '   </param_ws>' +
+                            '</param>',
+                function (r) {
+
+                    if (r.xmlDoc.status != 200) {
+                        alert(r.xmlDoc.statusText);
+                        return;
+                    }
+
+                    'Taka przychodzi odpowiedź:'
+                    ''
+                    '<ret_data>'
+                    '  <status>0</status>'
+                    '  <message>..tu jest komunikat jeśli jest błąd.</message>'
+                    '  <data>..tu są dane..</data>'
+                    '</ret_data>'
+                    ''
+                    
+                    var ret_data;
+                    var status;
+                    var message;
+
+                    if (dataGridFormat == 'json') {
+                        ret_data = JSON.parse(r.xmlDoc.responseText);
+                        status = ret_data.ret_data.status;
+                        message = ret_data.ret_data.message;
+                        dataGrid = ret_data.ret_data.data;
+                    }
+                    else {
+                        ret_data = dhx4.ajax.xmltop("ret_data", r.xmlDoc.responseText);
+                        status = ret_data.getElementsByTagName("status")[0].innerHTML;
+                        message = ret_data.getElementsByTagName("message")[0].innerHTML;
+                        dataGrid = ret_data.getElementsByTagName("data")[0].innerHTML;
+                    }
+
+                    if (status == 0) {  // response is ok
+                        if (dataGridFormat=='json') 
+                            myGrid.parse(dataGrid, 'json'); //json
+                        else
+                            myGrid.parse(dataGrid);   //xml
+
+                        //myGrid.enableAlterCss("even", "uneven");
+                    }
+                    else
+                        alert(message);
+                });
+
+        };
 
 
     </script>
 </head>
-<body>
-    <form id="controlsToInvoke" action="">
-        <p>
-        <input type="button" value="Click to Invoke Another Site" onclick="callOtherDomain()" />
-        </p>
-    </form>
-    <p id="intro">
-    This page POSTs XML data to another domain using cross-site XMLHttpRequest mitigated by Access Control.  This is the preflight scenario and the invocation to a resource on another domain takes place using first an OPTIONS request, then an actual POST request.
-    </p>
-    <div id="textDiv">
-        This XHTML document POSTs to another resource using cross-site XHR.  If you get a response back, the content of that response should reflect what you POSTed.
-    </div>
+<body onload="doOnLoad();">
+	<div id="gridbox" style="width:1200px; height:500px; background-color:white;"></div>
+    <br>
+	<div><a href="#" onClick="odswiezGrida();">zmiana szer kolumn </a></div>
+
+
 </body>
 </html>

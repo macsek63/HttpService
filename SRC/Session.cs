@@ -10,11 +10,14 @@ namespace HttpService
     /// </summary>
     public class Session
     {
-        int uzytkownikID;          //uzytkownikID usera
+        public static int Maks_liczba_polaczen = 0;     //maksymalna liczba połączeń do serwisu Http, jeśli 0 to nie ma ograniczeń
+        private static Hashtable listaSesji = new Hashtable();  //tablica otwartych sesji
+
+        decimal uzytkownikID;          //uzytkownikID usera
         string login;           //login
         DateTime lastRequest;   //ostatnie żądanie obsługi ze strony usera
 
-        public Session(string a_login, int UzytkownikID, DateTime a_lastRequest)
+        public Session(string a_login, decimal UzytkownikID, DateTime a_lastRequest)
         {
             login = a_login;
             uzytkownikID = UzytkownikID;
@@ -42,7 +45,7 @@ namespace HttpService
                 lastRequest = value;
             }
         }
-        public int UzytkownikID
+        public decimal UzytkownikID
         {
             get
             {
@@ -54,23 +57,30 @@ namespace HttpService
             }
         }
 
+
         /// <summary>
         /// Dodaje nową sesję 
         /// </summary>
-        /// <param name="guid">guid</param>
         /// <param name="login">Login</param>
         /// <param name="UzytkownikID">uzytkownikID</param>
         /// <param name="ip">Adres Ip klienta</param>
         /// <param name="sesje">Tablica sesji</param>
         /// <returns>Klucz sesji</returns>
-        static public string DodajSesje(string guid, string login, int uzytkownikID, string ip, Hashtable sesje)
+        static public string DodajSesje(string login, int uzytkownikID, string ip)
         {
+            string guid;
             string key;
-            if (guid == null)
-               guid = System.Guid.NewGuid().ToString();
+            guid = System.Guid.NewGuid().ToString();
             key = guid + ip;   //klucz sesji
             Session sesja = new Session(login, uzytkownikID, DateTime.Now);
-            sesje.Add(key, sesja);
+            lock (listaSesji)
+            {
+                listaSesji.Add(key, sesja);
+                kasujNieaktywneSesje();
+                if (Maks_liczba_polaczen > 0 && listaSesji.Count > Maks_liczba_polaczen)
+                    throw new Exception("Przekroczona liczba połączeń do serwisu Http.");
+            }
+
             return guid;
         }
 
@@ -81,18 +91,21 @@ namespace HttpService
         /// <param name="key"></param>
         /// <param name="sesje"></param>
         /// <returns></returns>
-        static public Session DajSesje(string key, Hashtable sesje)
+        static public Session DajSesje(string key)
         {
-            if (key == null || !sesje.Contains(key))
-                return null;   //nie ma sesji o podanym kluczu
-            Session s = (Session)sesje[key];
-            if (s.LastRequest.AddMinutes(15).CompareTo(DateTime.Now) < 0)
+            lock (listaSesji)
             {
-                sesje.Remove(key);
-                return null;
+                if (key == null || !listaSesji.Contains(key))
+                    return null;   //nie ma sesji o podanym kluczu
+                Session s = (Session)listaSesji[key];
+                if (s.LastRequest.AddMinutes(15).CompareTo(DateTime.Now) < 0)
+                {
+                    listaSesji.Remove(key);
+                    return null;
+                }
+                s.LastRequest = DateTime.Now;
+                return s;
             }
-            s.LastRequest = DateTime.Now;
-            return s;
         }
 
         /// <summary>
@@ -100,10 +113,10 @@ namespace HttpService
         /// ostatnie 15 minut
         /// </summary>
         /// <param name="sesje">Tablica sesji</param>
-        static public void KasujNieaktywneSesje(Hashtable sesje)
+        static private void kasujNieaktywneSesje()
         {
             ArrayList a = new ArrayList();
-            IDictionaryEnumerator myEnumerator = sesje.GetEnumerator();
+            IDictionaryEnumerator myEnumerator = listaSesji.GetEnumerator();
             while (myEnumerator.MoveNext())
             {
                 Session s = (Session)myEnumerator.Value;
@@ -112,7 +125,7 @@ namespace HttpService
             }
 
             for (int i = 0; i < a.Count; i++)
-                sesje.Remove(a[i]);
+                listaSesji.Remove(a[i]);
         }
 
         //static public string DajLoginSesji(string key, Hashtable sesje)

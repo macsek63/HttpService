@@ -31,37 +31,38 @@ namespace HttpService
             }
 
 
-            ////jeśli w pliku parametrycznym nie podane są wszystkie dane potrzebne do połączenia z bazą SQL 
-            ////to podnosimy okno do podania tych danych 
-            //if (String.IsNullOrEmpty(XmlConfiguration.Settings["SQLServer"]) ||
-            //    String.IsNullOrEmpty(XmlConfiguration.Settings["Database"]) ||
-            //    String.IsNullOrEmpty(XmlConfiguration.Settings["Login"]) ||
-            //    String.IsNullOrEmpty(XmlConfiguration.Settings["Password"])
-            //    )
-            //{
-            //    connForm = new ConnectForm();
-            //    connForm.ShowDialog();
-            //    connForm.Dispose();
+            //jeśli w pliku parametrycznym nie podane są wszystkie dane potrzebne do połączenia z bazą SQL 
+            //to podnosimy okno do podania tych danych 
+            if (String.IsNullOrEmpty(XmlConfiguration.Settings["SQLServer"]) ||
+                String.IsNullOrEmpty(XmlConfiguration.Settings["Database"]) ||
+                String.IsNullOrEmpty(XmlConfiguration.Settings["Login"]) ||
+                String.IsNullOrEmpty(XmlConfiguration.Settings["Password"])
+                )
+            {
+                connForm = new ConnectForm();
+                DialogResult ret = connForm.ShowDialog();
+                connForm.Dispose();
 
-            //    if (SQL.Connection == null || SQL.Connection.State != System.Data.ConnectionState.Open)
-            //        return;
-            //}
-            //else
-            //{
-            //    if (!ConnectForm.ConnectApp())
-            //        return;
-            //}
+                if (ret != DialogResult.OK)
+                    return;
+            }
+            else
+            {
+                if (!ConnectForm.ConnectApp())
+                    return;
+            }
 
 
             try
             {
                 SimpleHTTPServer sh = new SimpleHTTPServer();
+                sh.Start();
                 Application.Run(new FormService());
                 sh.Stop();
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Error:Program.Main");
+                MessageBox.Show(e.Message, "Program.Main");
                 return;
             }
 

@@ -6,10 +6,11 @@
     <add key="Login" value="mac" />
     <add key="Password" value="7QfFrRMQIB0=" />
     <add key="Port_http" value="1602" />
-    <add key="Port_https" value="1603" />
+    <add key="_Port_https" value="1603" />
     <add key="IndexFile_http" value="index.html" />
     <add key="IndexFile_https" value="IndexDirectory\index2.html" />
-    <add key="RootDirectory" value="C:\DANE_MACY\Projekty_VS2010\HttpService\HttpRootDirectory" />
-    <add key="_RootDirectory" value="C:\DANE_MACY\VSProjects\HttpService\HttpRootDirectory" />
+    <add key="CertificateFile" value="ucert.pfx" />
+    <add key="_RootDirectory" value="C:\DANE_MACY\WebProject" />
+    <add key="RootDirectory" value="C:\DANE_MACY\VSProjects\HttpService\HttpRootDirectory" />
   </appSettings>
 </configuration>

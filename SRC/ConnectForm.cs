@@ -19,6 +19,7 @@ namespace HttpService
             this.tb_Login.Text = XmlConfiguration.Settings["Login"];
             this.tb_Baza.Text = XmlConfiguration.Settings["Database"];
             this.tb_Serwer.Text = XmlConfiguration.Settings["SQLServer"];
+            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
         }
 
         private void button_wy_Click(object sender, EventArgs e)
@@ -44,9 +45,9 @@ namespace HttpService
             }
             else
             {
-                Crypto security = new Crypto();
+                //Crypto security = new Crypto();
 
-                string haslo = security.Encrypt(this.tb_Haslo.Text, this.tb_Login.Text);
+                string haslo = Crypto.Encrypt(this.tb_Haslo.Text, this.tb_Login.Text);
 
                 XmlConfiguration.writeXMLValue("SQLServer", this.tb_Serwer.Text);
                 XmlConfiguration.writeXMLValue("Database", this.tb_Baza.Text);
@@ -57,6 +58,9 @@ namespace HttpService
                 XmlConfiguration.Settings["Database"] = this.tb_Baza.Text;
                 XmlConfiguration.Settings["Login"] = this.tb_Login.Text;
                 XmlConfiguration.Settings["Password"] = haslo;
+
+                this.DialogResult = System.Windows.Forms.DialogResult.OK;
+
             }
 
             this.Close();
@@ -79,13 +83,6 @@ namespace HttpService
             }
         }
 
-        /// <summary>
-        /// Połączenie usera z bazą danych
-        /// </summary>
-        public static bool ConnectUser(string user, string pass)
-        {
-            return Connect(user, pass, XmlConfiguration.Settings["SQLServer"], XmlConfiguration.Settings["Database"]);
-        }
 
         /// <summary>
         /// Połączenie na podany login 
@@ -100,7 +97,10 @@ namespace HttpService
 
             try
             {
-                SQL.Connect("App=SSN; Data Source=" + serwer + ";Initial Catalog=" + baza + ";User ID=" + login + "; Password=" + haslo);
+
+                SQL.ConnectionString = "App=SSN; Data Source=" + serwer + ";Initial Catalog=" + baza + ";User ID=" + login + "; Password=" + haslo;
+                SQL.SprawdzPolaczenieSql();    
+
                 return true;
             }
             catch
@@ -118,12 +118,12 @@ namespace HttpService
         {
             string login;
             string haslo;
-            Crypto security = new Crypto();
+            //Crypto security = new Crypto();
 
             login = XmlConfiguration.Settings["Login"];
             haslo = XmlConfiguration.Settings["Password"];
 
-            haslo = security.Decrypt((string)haslo, (string)XmlConfiguration.Settings["Login"]);
+            haslo = Crypto.Decrypt((string)haslo, (string)XmlConfiguration.Settings["Login"]);
 
             return Connect(login, haslo, XmlConfiguration.Settings["SQLServer"], XmlConfiguration.Settings["Database"]);
 

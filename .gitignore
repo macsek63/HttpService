@@ -8,6 +8,6 @@ src/bin/
 
 src/obj/
 
-*.png
+HttpRootDirectory/mob4.png
 SQL/*.ssms_suo
 SRC/*.suo

@@ -10,3 +10,4 @@ src/obj/
 
 *.png
 SQL/*.ssms_suo
+SRC/*.suo

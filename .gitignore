@@ -7,5 +7,6 @@ HttpRootDirectory/dhtmlx/
 src/bin/
 
 src/obj/
+
 *.png
 SQL/*.ssms_suo
